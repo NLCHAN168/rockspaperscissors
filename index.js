@@ -1,72 +1,119 @@
-let p = playerSelection();
+let p;
 let c = getComputerChoice();
+let playerCounter = 0;
+let computerCounter = 0;
+let ties = 0;
 
 function getComputerChoice() {
-  let playerSelection = Math.random() * 100 + 1;
-  if (playerSelection < 33) {
+  let num = Math.random() * 100 + 1;
+  if (num < 33) {
     return "rock";
   }
-  if (playerSelection > 33 && playerSelection < 66) {
+  if (num > 33 && num < 66) {
     return "paper";
   } else {
     return "scissors";
   }
 }
 
-function play(playerSelection, getComputerChoice) {
-  p = playerSelection();
+function tie() {}
+
+function play(p) {
   c = getComputerChoice();
   if (p === c) {
-    console.log("Player selected " + p);
-    console.log("Computer selected " + c);
-    console.log("Tie!");
+    narrator.textContent =
+      "Player selected " + p + ". Computer selected " + c + ". Result: Tie!";
+    ties++;
+    update();
     return "Tie!";
   } else if (
     (p == "rock" && c == "scissors") ||
     (p == "paper" && c == "rock") ||
     (p == "scissors" && c == "paper")
   ) {
-    console.log("Player selected " + p);
-    console.log("Computer selected " + c);
-    console.log("Win!");
+    narrator.textContent =
+      "Player selected " + p + ". Computer selected " + c + ". Result: Win!";
+    playerCounter++;
+    update();
     return "Win!";
   } else if (
     (p == "rock" && c == "paper") ||
     (p == "paper" && c == "scissors") ||
     (p == "scissors" && c == "rock")
   ) {
-    console.log("Player selected " + p);
-    console.log("Computer selected " + c);
-    console.log("Lose!");
+    narrator.textContent =
+      "Player selected " + p + ". Computer selected " + c + ". Result: Lose!";
+    computerCounter++;
+    update();
     return "Lose!";
   } else {
     console.log("Invalid player choice.");
   }
 }
 
-function playerSelection() {
-  let z = prompt("Please choose Rock, Paper, or Scissors");
-  return z.toLowerCase();
+function playerSelection(selection) {
+  p = selection;
 }
 
-function game() {
-  let playerCounter = 0;
-  let computerCounter = 0;
-  let tie = 0;
-  for (let i = 0; i < 5; i++) {
-    let result = play(playerSelection, getComputerChoice);
-    if (result == "Win!") {
-      playerCounter++;
-    }
-    if (result == "Lose!") {
-      computerCounter++;
-    } else {
-      tie++;
-    }
-  }
-  console.log("Player wins: " + playerCounter);
-  console.log("Computer wins: " + computerCounter);
-  console.log("Ties: " + tie);
+const main = document.createElement("div");
+main.setAttribute("id", "main");
+document.body.appendChild(main);
+const rock = document.createElement("button");
+rock.innerHTML = "Rock";
+const paper = document.createElement("button");
+paper.innerHTML = "Paper";
+const scissors = document.createElement("button");
+scissors.innerHTML = "Scissors";
+const reset = document.createElement("button");
+reset.innerHTML = "Reset score";
+main.appendChild(rock);
+main.appendChild(paper);
+main.appendChild(scissors);
+main.appendChild(reset);
+
+rock.addEventListener("click", () => {
+  playerSelection("rock");
+  play(p, getComputerChoice());
+});
+paper.addEventListener("click", () => {
+  playerSelection("paper");
+  play(p, getComputerChoice());
+});
+scissors.addEventListener("click", () => {
+  playerSelection("scissors");
+  play(p, getComputerChoice());
+});
+
+reset.addEventListener("click", () => {
+  playerCounter = 0;
+  computerCounter = 0;
+  ties = 0;
+  update();
+});
+
+function update() {
+  counterdiv.textContent =
+    "Player score: " +
+    playerCounter +
+    " Computer score: " +
+    computerCounter +
+    " Ties: " +
+    ties;
 }
 
-game();
+const counterdiv = document.createElement("div");
+counterdiv.setAttribute("id", "counter");
+counterdiv.textContent =
+  "Player score: " +
+  playerCounter +
+  " Computer score: " +
+  computerCounter +
+  " Ties: " +
+  ties;
+document.body.appendChild(counterdiv);
+
+const narration = document.createElement("div");
+narration.setAttribute("id", "narration");
+document.body.appendChild(narration);
+var narrator = document.createElement("p");
+narration.appendChild(narrator);
