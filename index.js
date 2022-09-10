@@ -1,47 +1,129 @@
-const x = playerSelection;
-const y = getComputerChoice;
+let p;
+let c = getComputerChoice();
+let playerCounter = 0;
+let computerCounter = 0;
+let ties = 0;
 
 function getComputerChoice() {
-    let x = Math.random()*100 + 1;
-    if (x < 33) {
-        console.log(x);
-        console.log("Computer chose Rock");
-        return "rock";
-    }
-    if (x > 33 && x < 66) {
-        console.log(x);
-        console.log("Computer chose Paper");
-        return "paper";
-    }
-    else {
-        console.log(x);
-        console.log("Computer chose Scissors");
-        return "scissors";
-    }
+  let num = Math.random() * 100 + 1;
+  if (num < 33) {
+    return "rock";
+  }
+  if (num > 33 && num < 66) {
+    return "paper";
+  } else {
+    return "scissors";
+  }
 }
 
-function play(playerSelection, computerSelection) {
-    if (x === y) {
-        console.log("Player selected " + x);
-        console.log("Computer selected " + y);
-        console.log("Tie!");
-    }
-    else if (x == "rock" && y == "scissors") {
-        console.log("Player selected " + x);
-        console.log("Computer selected " + y);
-        console.log("Win!");
-    }
-    else if (x == "rock" && y == "paper") {
-        console.log("Player selected " + x);
-        console.log("Computer selected " + y);
-        console.log("Lose!");
-    }
+function checkWin() {
+  if (playerCounter == 5) {
+    narrator.textContent = "Player wins!";
+  } else if (computerCounter == 5) {
+    narrator.textContent = "Computer wins!";
+  }
 }
 
-function playerSelection() {
-    let z = prompt("Please choose Rock, Paper, or Scissors");
-    z.toLowerCase();
-    return z;
+function play(p) {
+  c = getComputerChoice();
+  if (p === c) {
+    narrator.textContent =
+      "Player selected " + p + ". Computer selected " + c + ". Result: Tie!";
+    ties++;
+    update();
+    return "Tie!";
+  } else if (
+    (p == "rock" && c == "scissors") ||
+    (p == "paper" && c == "rock") ||
+    (p == "scissors" && c == "paper")
+  ) {
+    narrator.textContent =
+      "Player selected " + p + ". Computer selected " + c + ". Result: Win!";
+    playerCounter++;
+    update();
+    return "Win!";
+  } else if (
+    (p == "rock" && c == "paper") ||
+    (p == "paper" && c == "scissors") ||
+    (p == "scissors" && c == "rock")
+  ) {
+    narrator.textContent =
+      "Player selected " + p + ". Computer selected " + c + ". Result: Lose!";
+    computerCounter++;
+    update();
+    return "Lose!";
+  } else {
+    console.log("Invalid player choice.");
+  }
 }
 
-play(x, y);
+function playerSelection(selection) {
+  p = selection;
+}
+
+const main = document.createElement("div");
+main.setAttribute("id", "main");
+document.body.appendChild(main);
+const rock = document.createElement("button");
+rock.innerHTML = "Rock";
+const paper = document.createElement("button");
+paper.innerHTML = "Paper";
+const scissors = document.createElement("button");
+scissors.innerHTML = "Scissors";
+const reset = document.createElement("button");
+reset.innerHTML = "Reset score";
+main.appendChild(rock);
+main.appendChild(paper);
+main.appendChild(scissors);
+main.appendChild(reset);
+
+rock.addEventListener("click", () => {
+  playerSelection("rock");
+  play(p, getComputerChoice());
+  checkWin();
+});
+paper.addEventListener("click", () => {
+  playerSelection("paper");
+  play(p, getComputerChoice());
+  checkWin();
+});
+scissors.addEventListener("click", () => {
+  playerSelection("scissors");
+  play(p, getComputerChoice());
+  checkWin();
+});
+
+reset.addEventListener("click", () => {
+  playerCounter = 0;
+  computerCounter = 0;
+  ties = 0;
+  narrator.textContent = "";
+  update();
+});
+
+function update() {
+  counterdiv.textContent =
+    "Player score: " +
+    playerCounter +
+    " Computer score: " +
+    computerCounter +
+    " Ties: " +
+    ties;
+}
+
+const counterdiv = document.createElement("div");
+counterdiv.setAttribute("id", "counter");
+counterdiv.textContent =
+  "Player score: " +
+  playerCounter +
+  " Computer score: " +
+  computerCounter +
+  " Ties: " +
+  ties;
+document.body.appendChild(counterdiv);
+
+const narration = document.createElement("div");
+narration.setAttribute("id", "narration");
+document.body.appendChild(narration);
+var narrator = document.createElement("p");
+narration.appendChild(narrator);
