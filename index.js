@@ -16,7 +16,13 @@ function getComputerChoice() {
   }
 }
 
-function tie() {}
+function checkWin() {
+  if (playerCounter == 5) {
+    narrator.textContent = "Player wins!";
+  } else if (computerCounter == 5) {
+    narrator.textContent = "Computer wins!";
+  }
+}
 
 function play(p) {
   c = getComputerChoice();
@@ -74,20 +80,24 @@ main.appendChild(reset);
 rock.addEventListener("click", () => {
   playerSelection("rock");
   play(p, getComputerChoice());
+  checkWin();
 });
 paper.addEventListener("click", () => {
   playerSelection("paper");
   play(p, getComputerChoice());
+  checkWin();
 });
 scissors.addEventListener("click", () => {
   playerSelection("scissors");
   play(p, getComputerChoice());
+  checkWin();
 });
 
 reset.addEventListener("click", () => {
   playerCounter = 0;
   computerCounter = 0;
   ties = 0;
+  narrator.textContent = "";
   update();
 });
 
